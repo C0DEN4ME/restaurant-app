@@ -3,9 +3,63 @@
   --color-text: #e0e0e0;
   --font-family: 'Arial', sans-serif;
   color-scheme: dark;
+  --switch-width: 3.5rem;
+  --switch-height: 2rem;
+  --knob-size: 1.5rem;
+  --switch-gap: 0.25rem;
 }
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-family);
+}
+[data-theme='light'] {
+  --color-bg: #ebe2cc;
+  --color-text: #121212;
+  color-scheme: light;
+}
+.mode-switch {
+  display: inline-block;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  border-radius: calc(var(--switch-height) / 2);
+  background-color: var(--color-text);
+  position: relative;
+  cursor: pointer;
+}
+.visually-hidden {
+  /* Visually hidden pattern: hides elements visually, stays accessible */
+  border: 0;
+  clip-path: inset(50%);
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+.mode-switch::before {
+  content: '';
+  position: absolute;
+  top: var(--switch-gap);
+  left: var(--switch-gap);
+  width: var(--knob-size);
+  height: var(--knob-size);
+  border-radius: 50%;
+  background-color: var(--color-bg);
+  transition: transform 0.3s ease;
+  background-image: url('../img/moon.svg');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+input:checked + .mode-switch::before {
+  /*The knob moves the width of the track on X-coordinate, minus its own size, minus the gap on both sides.*/
+  transform: translateX(
+    calc(var(--switch-width) - var(--knob-size) - 2 * var(--switch-gap))
+  );
+  background-image: url('../img/sun.svg');
+  background-size: 95%;
+  background-position: center;
+  background-repeat: no-repeat;
 }

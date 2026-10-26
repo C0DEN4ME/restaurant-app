@@ -12,6 +12,16 @@
       <h1>Student restaurant app</h1>
       <button id="settings">Settings</button>
       <button id="login">Login</button>
+      <label for="theme-toggle">
+        <input
+          type="checkbox"
+          role="switch"
+          id="theme-toggle"
+          class="visually-hidden"
+        />
+        <span class="mode-switch"></span>
+        <span class="visually-hidden">Lightmode</span>
+      </label>
     </header>
     <main>
       <section id="content">
@@ -21,16 +31,16 @@
           <select id="city-filter" name="city">
             <option value="">All Cities</option>
           </select>
-          <button type="Reset" id="reset-city">Reset</button>
+          <button type="reset" id="reset-city">Reset</button>
         </form>
         <form id="company-form">
           <label for="company-filter">Company: </label>
-          <select id="company-filter" name="company">
+          <select id="company-filter" name="company" autocomplete="off">
             <option value="">All Companies</option>
             <option value="Sodexo">Sodexo</option>
             <option value="Compass Group">Compass Group</option>
           </select>
-          <button type="Reset" id="reset-company">Reset</button>
+          <button type="reset" id="reset-company">Reset</button>
         </form>
       </section>
     </main>

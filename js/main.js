@@ -1,5 +1,3 @@
-function greeting() {
-  console.log('Hello World!');
-}
+import {initTheme} from './theme.js';
 
-greeting();
+initTheme();
