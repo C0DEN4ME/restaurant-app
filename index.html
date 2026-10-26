@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Student Restaurant App</title>
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Student restaurant app</h1>
+      <button id="settings">Settings</button>
+      <button id="login">Login</button>
+    </header>
+    <main>
+      <section id="content">
+        <h2>Restaurants</h2>
+        <form id="city-form">
+          <label for="city-filter">City: </label>
+          <select id="city-filter" name="city">
+            <option value="">All Cities</option>
+          </select>
+          <button type="Reset" id="reset-city">Reset</button>
+        </form>
+        <form id="company-form">
+          <label for="company-filter">Company: </label>
+          <select id="company-filter" name="company">
+            <option value="">All Companies</option>
+            <option value="Sodexo">Sodexo</option>
+            <option value="Compass Group">Compass Group</option>
+          </select>
+          <button type="Reset" id="reset-company">Reset</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
