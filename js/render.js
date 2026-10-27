@@ -11,3 +11,24 @@ export function renderRestaurantslist(restaurants) {
     list.appendChild(li);
   }
 }
+export function renderDailyMenu(courses, container) {
+  container.replaceChildren();
+  if (!courses || courses.length === 0) {
+    const noMenuMessage = document.createElement('p');
+    noMenuMessage.textContent = 'No menu available for today.';
+    container.appendChild(noMenuMessage);
+    return;
+  } else {
+    for (const course of courses) {
+      const courseDiv = document.createElement('div');
+      courseDiv.classList.add('course');
+      const name = document.createElement('h3');
+      name.textContent = course.name;
+      const price = document.createElement('p');
+      price.textContent = `Price: ${course.price}`;
+      courseDiv.appendChild(name);
+      courseDiv.appendChild(price);
+      container.appendChild(courseDiv);
+    }
+  }
+}
