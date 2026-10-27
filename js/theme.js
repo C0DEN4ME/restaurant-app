@@ -11,22 +11,18 @@ export function initTheme() {
     checkbox.checked = savedTheme === 'light';
   }
 
-  localStorage.getItem('data-theme');
-
   // when the toggle is clicked change the theme
   // and save it to localStorage so it stays after refresh
-  document
-    .getElementById('theme-toggle')
-    .addEventListener('change', function () {
-      if (checkbox.checked) {
-        // light mode
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-      } else {
-        // dark mode
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    });
+  checkbox.addEventListener('change', function () {
+    if (checkbox.checked) {
+      // light mode
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    } else {
+      // dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
   console.log('Theme initialized');
 }
