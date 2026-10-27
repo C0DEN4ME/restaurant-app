@@ -24,7 +24,7 @@
       </label>
     </header>
     <main>
-      <section id="content">
+      <section id="restaurants">
         <h2>Restaurants</h2>
         <form id="city-form">
           <label for="city-filter">City: </label>
@@ -42,7 +42,40 @@
           </select>
           <button type="reset" id="reset-company">Reset</button>
         </form>
+        <ul id="restaurant-list"></ul>
+      </section>
+      <section id="restaurant-details" hidden>
+        <header>
+          <h2 id="restaurant-name"></h2>
+          <button type="button" id="back-button" aria-label="back to list">
+            Back to list
+          </button>
+        </header>
+        <p id="restaurant-address"></p>
+        <p id="restaurant-city"></p>
+        <p id="restaurant-company"></p>
+        <fieldset>
+          <legend>Menu</legend>
+          <label>
+            <input type="radio" name="menu-type" value="daily" checked />
+            Today
+          </label>
+          <label>
+            <input type="radio" name="menu-type" value="weekly" /> Weekly
+          </label>
+        </fieldset>
+        <div id="restaurant-menu"></div>
       </section>
     </main>
+    <footer id="footer">
+      <p>
+        powered by
+        <a href="https://www.metropolia.fi/"
+          >Metropolia University of Applied Sciences</a
+        >
+        Restaurant data: Metropolia Student Restaurants API Jonatan Åberg,
+        10/2026>
+      </p>
+    </footer>
   </body>
 </html>
