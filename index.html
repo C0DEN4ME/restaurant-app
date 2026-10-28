@@ -68,14 +68,42 @@
       </section>
     </main>
     <footer id="footer">
-      <p>
-        powered by
-        <a href="https://www.metropolia.fi/"
-          >Metropolia University of Applied Sciences</a
-        >
-        Restaurant data: Metropolia Student Restaurants API Jonatan Åberg,
-        10/2026>
-      </p>
+      <p>Restaurant data: Metropolia Student Restaurants API</p>
+      <p>Jonatan Åberg, 10/2026</p>
     </footer>
+    <dialog id="settings-dialog">
+      <h2>Settings</h2>
+      <form method="dialog">
+        <fieldset id="language-fieldset">
+          <legend>Language</legend>
+          <label>
+            <input
+              type="radio"
+              value="fi"
+              name="language"
+              class="visually-hidden"
+              checked
+            />
+            <span>
+              <img src="img/flag-fi.svg" alt="" />
+              FI
+            </span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="en"
+              name="language"
+              class="visually-hidden"
+            />
+            <span>
+              <img src="img/flag-gb.svg" alt="" />
+              EN
+            </span>
+          </label>
+        </fieldset>
+        <button id="settings-close-btn" type="submit">Close</button>
+      </form>
+    </dialog>
   </body>
 </html>

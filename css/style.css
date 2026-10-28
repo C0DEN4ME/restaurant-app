@@ -1,21 +1,40 @@
 :root {
-  --color-bg: #121212;
-  --color-text: #e0e0e0;
+  --color-bg: #2c3639;
+  --color-text: #dcd7c9;
+  --color-surface: #3f4e4f;
+  --color-accent: hsl(0, 1%, 19%);
+  --color-muted: #4a4a4a;
   --font-family: 'Arial', sans-serif;
   color-scheme: dark;
   --switch-width: 3.5rem;
   --switch-height: 2rem;
   --knob-size: 1.5rem;
   --switch-gap: 0.25rem;
+  --color-btn-bg: #a27b5c;
+  --color-mode-switch-bg: #d6e8db;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-family);
 }
+#restaurants h2 {
+  margin-top: 0.1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
 [data-theme='light'] {
-  --color-bg: #ebe2cc;
+  --color-bg: #fff8de;
   --color-text: #121212;
+  --color-surface: #99a98f;
+  --color-accent: #958a71;
+  --color-mode-switch-bg: #d6e8db;
+  --color-btn-bg: #c1d0b5;
   color-scheme: light;
 }
 .mode-switch {
@@ -23,7 +42,7 @@ body {
   width: var(--switch-width);
   height: var(--switch-height);
   border-radius: calc(var(--switch-height) / 2);
-  background-color: var(--color-text);
+  background-color: var(--color-mode-switch-bg);
   position: relative;
   cursor: pointer;
 }
@@ -60,6 +79,105 @@ input:checked + .mode-switch::before {
   );
   background-image: url('../img/sun.svg');
   background-size: 95%;
-  background-position: center;
-  background-repeat: no-repeat;
+}
+
+header {
+  background-color: var(--color-surface);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+#restaurant-list {
+  padding: 1rem;
+}
+#settings-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 60%;
+  height: 30%;
+}
+#settings-dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#language-fieldset {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  border: 1px solid var(--color-text);
+  border-radius: 0.5rem;
+  justify-items: center;
+}
+#language-fieldset span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem;
+  border: 2px solid var(--color-muted);
+  border-radius: 0.2rem;
+  min-width: 5rem;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+#language-fieldset span:hover {
+  background-color: var(--color-accent);
+  border: 2px solid var(--color-text);
+}
+#language-fieldset input:checked + span {
+  background-color: var(--color-accent);
+  border: 2px solid var(--color-text);
+}
+#language-fieldset input:focus-visible + span {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+#settings-dialog h2 {
+  align-self: center;
+}
+
+#language-fieldset img {
+  width: 2.5rem;
+  height: auto;
+  padding: 0.2rem;
+}
+#language-fieldset legend {
+  font-weight: bold;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+#restaurant-list li {
+  background-color: var(--color-surface);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  list-style: none;
+}
+#restaurant-list button {
+  background-color: var(--color-btn-bg);
+  color: var(--color-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+#settings-close-btn {
+  background-color: var(--color-accent);
+  color: var(--color-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  align-self: center;
 }
