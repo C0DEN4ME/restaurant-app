@@ -3,6 +3,15 @@ import {fetchRestaurants, fetchRestaurantMenu} from './api.js';
 import {renderRestaurantslist, renderDailyMenu} from './render.js';
 
 initTheme();
+toggleSettings();
+
+function toggleSettings() {
+  const settingsButton = document.getElementById('settings-button');
+  const settingsPanel = document.getElementById('settings-dialog');
+  settingsButton.addEventListener('click', () => {
+    settingsPanel.showModal();
+  });
+}
 
 // fetch restaurants and render the list
 async function loadRestaurants() {

@@ -4,15 +4,25 @@
   --color-surface: #3f4e4f;
   --color-accent: hsl(0, 1%, 19%);
   --color-muted: #4a4a4a;
+  --color-btn-bg: #a27b5c;
+  --color-mode-switch-bg: #d6e8db;
   --font-family: 'Arial', sans-serif;
-  color-scheme: dark;
   --switch-width: 3.5rem;
   --switch-height: 2rem;
   --knob-size: 1.5rem;
   --switch-gap: 0.25rem;
-  --color-btn-bg: #a27b5c;
-  --color-mode-switch-bg: #d6e8db;
+  color-scheme: dark;
 }
+[data-theme='light'] {
+  --color-bg: #fff8de;
+  --color-text: #121212;
+  --color-surface: #99a98f;
+  --color-accent: #958a71;
+  --color-btn-bg: #c1d0b5;
+  --color-mode-switch-bg: #d6e8db;
+  color-scheme: light;
+}
+
 *,
 *::before,
 *::after {
@@ -23,29 +33,7 @@ body {
   color: var(--color-text);
   font-family: var(--font-family);
 }
-#restaurants h2 {
-  margin-top: 0.1rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
-}
-[data-theme='light'] {
-  --color-bg: #fff8de;
-  --color-text: #121212;
-  --color-surface: #99a98f;
-  --color-accent: #958a71;
-  --color-mode-switch-bg: #d6e8db;
-  --color-btn-bg: #c1d0b5;
-  color-scheme: light;
-}
-.mode-switch {
-  display: inline-block;
-  width: var(--switch-width);
-  height: var(--switch-height);
-  border-radius: calc(var(--switch-height) / 2);
-  background-color: var(--color-mode-switch-bg);
-  position: relative;
-  cursor: pointer;
-}
+
 .visually-hidden {
   /* Visually hidden pattern: hides elements visually, stays accessible */
   border: 0;
@@ -56,6 +44,25 @@ body {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+header {
+  background-color: var(--color-surface);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.mode-switch {
+  display: inline-block;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  border-radius: calc(var(--switch-height) / 2);
+  background-color: var(--color-mode-switch-bg);
+  position: relative;
+  cursor: pointer;
 }
 .mode-switch::before {
   content: '';
@@ -81,17 +88,31 @@ input:checked + .mode-switch::before {
   background-size: 95%;
 }
 
-header {
-  background-color: var(--color-surface);
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 0.5rem;
+#restaurants h2 {
+  margin-top: 0.1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 #restaurant-list {
   padding: 1rem;
 }
+#restaurant-list li {
+  background-color: var(--color-surface);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  list-style: none;
+}
+#restaurant-list button {
+  background-color: var(--color-btn-bg);
+  color: var(--color-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
 #settings-dialog[open] {
   display: flex;
   flex-direction: column;
@@ -102,11 +123,17 @@ header {
   width: 60%;
   height: 30%;
 }
+#settings-dialog h2 {
+  align-self: center;
+  margin-top: 0;
+  margin-bottom: 0.2rem;
+}
 #settings-dialog form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
+
 #language-fieldset {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -116,6 +143,11 @@ header {
   border: 1px solid var(--color-text);
   border-radius: 0.5rem;
   justify-items: center;
+}
+#language-fieldset legend {
+  font-weight: bold;
+  text-align: center;
+  margin: 0.5rem 0;
 }
 #language-fieldset span {
   display: inline-flex;
@@ -141,36 +173,12 @@ header {
   outline: 2px solid var(--color-text);
   outline-offset: 2px;
 }
-#settings-dialog h2 {
-  align-self: center;
-}
-
 #language-fieldset img {
   width: 2.5rem;
   height: auto;
   padding: 0.2rem;
 }
-#language-fieldset legend {
-  font-weight: bold;
-  text-align: center;
-  margin: 0.5rem 0;
-}
-#restaurant-list li {
-  background-color: var(--color-surface);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  list-style: none;
-}
-#restaurant-list button {
-  background-color: var(--color-btn-bg);
-  color: var(--color-text);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
+
 #settings-close-btn {
   background-color: var(--color-accent);
   color: var(--color-text);
