@@ -32,6 +32,8 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-family);
+  margin: 0;
+  padding: 1rem;
 }
 
 .visually-hidden {
@@ -50,9 +52,15 @@ body > header {
   background-color: var(--color-surface);
   padding: 1rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   border-radius: 0.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+body > header h1 {
+  margin: 0;
+  margin-right: auto;
 }
 button {
   font: inherit;
@@ -61,6 +69,7 @@ button {
   border: none;
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
   cursor: pointer;
 }
 button:hover {
@@ -114,6 +123,23 @@ input:checked + .mode-switch::before {
   background-size: 95%;
 }
 
+#main-h2 {
+  font-size: 2rem;
+  text-align: center;
+  padding: 1rem;
+  margin: 0.5rem 0 1rem;
+}
+#city-form {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+#company-form {
+  display: flex;
+}
+
 #restaurants h2 {
   margin-top: 0.1rem;
   margin-bottom: 0.5rem;
@@ -124,19 +150,24 @@ input:checked + .mode-switch::before {
 }
 #restaurant-list li {
   background-color: var(--color-surface);
-  padding: 1rem;
+  padding: 2rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   text-align: center;
   list-style: none;
 }
 #restaurant-list button {
-  background-color: var(--color-btn-bg);
-  color: var(--color-text);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+}
+.restaurant-dialog fieldset {
+  display: flex;
+  gap: 20rem;
+  border: 1px solid var(--color-text);
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  text-align: center;
+  justify-content: center;
 }
 
 .dialog[open] {
@@ -163,7 +194,7 @@ input:checked + .mode-switch::before {
 .dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.6);
 }
-.restaurant-dialog [open] {
+.restaurant-dialog[open] {
   width: min(95%, 50rem);
   max-height: 90vh; /*vh = % of viewport height*/
 }
@@ -215,19 +246,16 @@ input:checked + .mode-switch::before {
 
 #settings-close-btn {
   background-color: var(--color-accent);
-  color: var(--color-text);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
   margin-top: 1rem;
   align-self: center;
 }
 #restaurant-map {
+  background-color: var(--color-bg);
   width: 100%;
   height: 300px;
-  margin-top: 1rem;
+  margin: 1rem 0;
   border-radius: 0.5rem;
+  flex-shrink: 0;
 }
 #profile-avatar {
   width: 6rem;
@@ -243,4 +271,30 @@ input:checked + .mode-switch::before {
 }
 [hidden] {
   display: none !important;
+}
+.restaurant-dialog header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.restaurant-dialog header h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  text-wrap: balance;
+}
+.course {
+  background-color: var(--color-bg);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.course h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+.course p {
+  margin: 0;
+  font-size: 1rem;
+  font-style: italic;
 }

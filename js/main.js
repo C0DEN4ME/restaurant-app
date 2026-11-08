@@ -25,6 +25,7 @@ async function loadRestaurants() {
 }
 const restaurantMenu = document.getElementById('restaurant-menu');
 const restaurantDetails = document.getElementById('restaurant-details');
+const restaurantName = document.getElementById('restaurant-name');
 
 // one listener for the whole list, easier than adding one to every button
 document
@@ -41,6 +42,7 @@ document
     try {
       // TODO: language is hardcoded to finnish for now
       const menu = await fetchRestaurantMenu(restaurantId, type, 'fi');
+      restaurantName.textContent = button.textContent;
       renderDailyMenu(menu.courses, restaurantMenu);
       restaurantDetails.showModal();
       console.log('Menu: ', menu);

@@ -25,7 +25,7 @@
     </header>
     <main>
       <section id="restaurants">
-        <h2>Restaurants</h2>
+        <h2 id="main-h2">Restaurants</h2>
         <form id="city-form">
           <label for="city-filter">City: </label>
           <select id="city-filter" name="city">
@@ -165,8 +165,6 @@
         />
         <button type="submit">Upload</button>
       </form>
-      <p id="profile-username"></p>
-      <p id="profile-email"></p>
       <form id="profile-form">
         <label for="profile-username-input">Change username</label>
         <input
@@ -200,17 +198,11 @@
     </dialog>
     <dialog id="restaurant-details" class="dialog restaurant-dialog">
       <header>
+        <button type="button" id="favorite-button">Add to favorites</button>
         <h2 id="restaurant-name"></h2>
-        <button type="button" id="back-button" name="Close">
-          Back to list
-        </button>
-        <button
-          type="button"
-          id="favorite-button"
-          aria-label="add to favorites"
-        >
-          <span>Add to favorites</span>
-        </button>
+        <form method="dialog">
+          <button type="submit" id="close-details-button">Close</button>
+        </form>
       </header>
       <p id="restaurant-address"></p>
       <p id="restaurant-city"></p>
