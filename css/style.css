@@ -162,12 +162,12 @@ input:checked + .mode-switch::before {
 }
 .restaurant-dialog fieldset {
   display: flex;
-  gap: 20rem;
+  gap: 1rem;
   border: 1px solid var(--color-text);
   border-radius: 0.5rem;
   margin: 1rem 0;
   text-align: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .dialog[open] {
