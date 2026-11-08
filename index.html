@@ -221,5 +221,18 @@
       <p id="menu-status" role="status"></p>
       <div id="restaurant-menu"></div>
     </dialog>
+    <dialog
+      id="error-dialog"
+      class="dialog"
+      role="alertdialog"
+      aria-labelledby="error-title"
+    >
+      <h2 id="error-title">API Connection problem</h2>
+      <p id="error-message" role="alert">Restaurants could not be loaded.</p>
+      <button type="button" id="retry-button">Try again</button>
+      <form method="dialog">
+        <button type="submit">Close</button>
+      </form>
+    </dialog>
   </body>
 </html>

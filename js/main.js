@@ -21,11 +21,13 @@ async function loadRestaurants() {
     console.log('Fetched restaurants:', restaurants); // keep for debugging
   } catch (error) {
     console.error('Error loading restaurants:', error);
+    errorDialog.showModal();
   }
 }
 const restaurantMenu = document.getElementById('restaurant-menu');
 const restaurantDetails = document.getElementById('restaurant-details');
 const restaurantName = document.getElementById('restaurant-name');
+const errorDialog = document.getElementById('error-dialog');
 
 // one listener for the whole list, easier than adding one to every button
 document
