@@ -10,8 +10,8 @@
   <body>
     <header>
       <h1>Student restaurant app</h1>
-      <button id="settings-button">Settings</button>
-      <button id="login">Login</button>
+      <button type="button" id="settings-button">Settings</button>
+      <button type="button" id="login-button">Login</button>
       <label for="theme-toggle">
         <input
           type="checkbox"
@@ -47,13 +47,19 @@
       <section id="restaurant-details" hidden>
         <header>
           <h2 id="restaurant-name"></h2>
-          <button type="button" id="back-button" aria-label="back to list">
-            Back to list
+          <button type="button" id="back-button">Back to list</button>
+          <button
+            type="button"
+            id="favorite-button"
+            aria-label="add to favorites"
+          >
+            <span>Add to favorites</span>
           </button>
         </header>
         <p id="restaurant-address"></p>
         <p id="restaurant-city"></p>
         <p id="restaurant-company"></p>
+        <div id="restaurant-map"></div>
         <fieldset>
           <legend>Menu</legend>
           <label>
@@ -64,6 +70,7 @@
             <input type="radio" name="menu-type" value="weekly" /> Weekly
           </label>
         </fieldset>
+        <p id="menu-status" role="status"></p>
         <div id="restaurant-menu"></div>
       </section>
     </main>
@@ -103,6 +110,120 @@
           </label>
         </fieldset>
         <button id="settings-close-btn" type="submit">Close</button>
+      </form>
+    </dialog>
+    <dialog id="login-dialog">
+      <h2>Login</h2>
+      <form id="login-form">
+        <label for="login-username">Username</label>
+        <input
+          type="text"
+          id="login-username"
+          name="username"
+          autocomplete="username"
+          required
+        />
+        <label for="login-password">Password</label>
+        <input
+          type="password"
+          id="login-password"
+          name="password"
+          autocomplete="current-password"
+          required
+        />
+        <button type="submit">Log In</button>
+      </form>
+      <p id="login-error" role="alert" hidden></p>
+      <p>
+        No account?
+        <button type="button" id="show-register-button">Register</button>
+      </p>
+      <form id="register-form" hidden>
+        <label for="register-username">Username</label>
+        <input
+          type="text"
+          id="register-username"
+          name="username"
+          autocomplete="username"
+          required
+        />
+        <p id="username-status" aria-live="polite"></p>
+
+        <label for="register-email">Email</label>
+        <input
+          type="email"
+          id="register-email"
+          name="email"
+          autocomplete="email"
+          required
+        />
+
+        <label for="register-password">Password</label>
+        <input
+          type="password"
+          id="register-password"
+          name="password"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        />
+
+        <p id="register-error" role="alert" hidden></p>
+
+        <button type="submit">Create account</button>
+      </form>
+
+      <form method="dialog">
+        <button type="submit">Close</button>
+      </form>
+    </dialog>
+    <dialog id="profile-dialog">
+      <h2>Profile</h2>
+      <img
+        id="profile-avatar"
+        src="img/default-profile-icon.jpg"
+        alt="Profile avatar"
+      />
+      <form id="profile-avatar-form">
+        <label for="profile-avatar-input">Change avatar:</label>
+        <input
+          type="file"
+          id="profile-avatar-input"
+          name="avatar"
+          accept="image/*"
+        />
+        <button type="submit">Upload</button>
+      </form>
+      <p id="profile-username"></p>
+      <p id="profile-email"></p>
+      <form id="Change-profile-details-form">
+        <label for="profile-username-input">Change <username:/label>
+        <input
+          type="text"
+          id="profile-username-input"
+          name="new-username"
+          required
+        />
+        <label for="profile-email-input">Change email:</label>
+        <input
+          type="email"
+          id="profile-email-input"
+          name="new-email"
+          required
+        />
+      </form>
+        <label for="reset-password-input">New password:</label>
+        <input
+          type="password"
+          id="reset-password-input"
+          name="new-password"
+          autocomplete="new-password"
+          required
+        />
+      </form>
+      <button type="button" id="logout-button">Logout</button>
+      <form method="dialog">
+        <button type="submit">Close</button>
       </form>
     </dialog>
   </body>
