@@ -42,7 +42,7 @@ document
       // TODO: language is hardcoded to finnish for now
       const menu = await fetchRestaurantMenu(restaurantId, type, 'fi');
       renderDailyMenu(menu.courses, restaurantMenu);
-      restaurantDetails.hidden = false;
+      restaurantDetails.showModal();
       console.log('Menu: ', menu);
     } catch (error) {
       console.error('Error fetching restaurant menu:', error);

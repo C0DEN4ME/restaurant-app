@@ -44,41 +44,12 @@
         </form>
         <ul id="restaurant-list"></ul>
       </section>
-      <section id="restaurant-details" hidden>
-        <header>
-          <h2 id="restaurant-name"></h2>
-          <button type="button" id="back-button">Back to list</button>
-          <button
-            type="button"
-            id="favorite-button"
-            aria-label="add to favorites"
-          >
-            <span>Add to favorites</span>
-          </button>
-        </header>
-        <p id="restaurant-address"></p>
-        <p id="restaurant-city"></p>
-        <p id="restaurant-company"></p>
-        <div id="restaurant-map"></div>
-        <fieldset>
-          <legend>Menu</legend>
-          <label>
-            <input type="radio" name="menu-type" value="daily" checked />
-            Today
-          </label>
-          <label>
-            <input type="radio" name="menu-type" value="weekly" /> Weekly
-          </label>
-        </fieldset>
-        <p id="menu-status" role="status"></p>
-        <div id="restaurant-menu"></div>
-      </section>
     </main>
     <footer id="footer">
       <p>Restaurant data: Metropolia Student Restaurants API</p>
       <p>Jonatan Åberg, 10/2026</p>
     </footer>
-    <dialog id="settings-dialog">
+    <dialog id="settings-dialog" class="dialog">
       <h2>Settings</h2>
       <form method="dialog">
         <fieldset id="language-fieldset">
@@ -112,7 +83,7 @@
         <button id="settings-close-btn" type="submit">Close</button>
       </form>
     </dialog>
-    <dialog id="login-dialog">
+    <dialog id="login-dialog" class="dialog">
       <h2>Login</h2>
       <form id="login-form">
         <label for="login-username">Username</label>
@@ -177,7 +148,7 @@
         <button type="submit">Close</button>
       </form>
     </dialog>
-    <dialog id="profile-dialog">
+    <dialog id="profile-dialog" class="dialog">
       <h2>Profile</h2>
       <img
         id="profile-avatar"
@@ -226,6 +197,37 @@
       <form method="dialog">
         <button type="submit">Close</button>
       </form>
+    </dialog>
+    <dialog id="restaurant-details" class="dialog restaurant-dialog">
+      <header>
+        <h2 id="restaurant-name"></h2>
+        <button type="button" id="back-button" name="Close">
+          Back to list
+        </button>
+        <button
+          type="button"
+          id="favorite-button"
+          aria-label="add to favorites"
+        >
+          <span>Add to favorites</span>
+        </button>
+      </header>
+      <p id="restaurant-address"></p>
+      <p id="restaurant-city"></p>
+      <p id="restaurant-company"></p>
+      <div id="restaurant-map"></div>
+      <fieldset>
+        <legend>Menu</legend>
+        <label>
+          <input type="radio" name="menu-type" value="daily" checked />
+          Today
+        </label>
+        <label>
+          <input type="radio" name="menu-type" value="weekly" /> Weekly
+        </label>
+      </fieldset>
+      <p id="menu-status" role="status"></p>
+      <div id="restaurant-menu"></div>
     </dialog>
   </body>
 </html>
