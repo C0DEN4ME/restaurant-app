@@ -24,32 +24,33 @@
       </label>
     </header>
     <main>
-      <section id="restaurants">
-        <h2 id="main-h2">Restaurants</h2>
-        <div class="filters">
+      <h2 id="filter-header">Filters</h2>
+      <div class="filters">
+        <div class="filter-group">
           <label for="sort-select">Sort:</label>
           <select id="sort-select">
             <option value="name-asc">Name (A-Z)</option>
             <option value="distance">Nearest</option>
           </select>
-          <p id="location-status" role="status"></p>
-          <form id="city-form">
-            <label for="city-filter" id="city-label">City: </label>
-            <select id="city-filter" name="city">
-              <option value="">All Cities</option>
-            </select>
-            <button type="reset" id="reset-city">Reset</button>
-          </form>
-          <form id="company-form">
-            <label for="company-filter" id="company-label">Company: </label>
-            <select id="company-filter" name="company" autocomplete="off">
-              <option value="">All Companies</option>
-              <option value="Sodexo">Sodexo</option>
-              <option value="Compass Group">Compass Group</option>
-            </select>
-            <button type="reset" id="reset-company">Reset</button>
-          </form>
         </div>
+        <form id="city-form" class="filter-group">
+          <label for="city-filter" id="city-label">City: </label>
+          <select id="city-filter" name="city">
+            <option value="">All Cities</option>
+          </select>
+        </form>
+        <form id="company-form">
+          <label for="company-filter" id="company-label">Company: </label>
+          <select id="company-filter" name="company" autocomplete="off">
+            <option value="">All Companies</option>
+            <option value="Sodexo">Sodexo</option>
+            <option value="Compass Group">Compass Group</option>
+          </select>
+        </form>
+      </div>
+      <p id="location-status" role="status"></p>
+      <section id="restaurants">
+        <h2 id="main-h2">Restaurants</h2>
         <ul id="restaurant-list"></ul>
       </section>
     </main>
@@ -229,7 +230,7 @@
       <p id="menu-status" role="status"></p>
       <div id="restaurant-menu"></div>
     </dialog>
-    <dialog 
+    <dialog
       id="error-dialog"
       class="dialog"
       role="alertdialog"

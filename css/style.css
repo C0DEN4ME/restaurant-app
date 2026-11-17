@@ -130,43 +130,43 @@ input:checked + .mode-switch::before {
 #main-h2 {
   font-size: 2rem;
   text-align: center;
-  padding: 1rem;
+  padding: 0.5rem;
   margin: 0.5rem 0 1rem;
 }
-#city-form {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-#city-label,
-#company-label {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-right: 0.5rem;
-}
-
-#city-filter,
-#company-filter {
+#filter-header {
+  font-size: 1.5rem;
+  text-align: center;
   padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 0.25rem;
-  border: 1px solid var(--color-muted);
+  margin: 0.5rem 0 1rem;
 }
-#reset-city,
-#reset-company {
-  padding: 0.5rem 1rem;
-  font-size: 0.95rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
+
 .filters {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem 2rem;
+  background-color: var(--color-surface);
+  padding: 1rem;
+  border-radius: 0.5rem;
   margin-bottom: 1rem;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.filter-group label {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+#location-status {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+#location-status:empty {
+  display: none;
 }
 
 #restaurants h2 {
