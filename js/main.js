@@ -6,6 +6,7 @@ import {
   renderWeeklyMenu,
   renderCities,
 } from './render.js';
+import {distanceInKm, getUserPosition} from './utils.js';
 
 initTheme();
 toggleSettings();
@@ -20,21 +21,44 @@ const menuStatus = document.getElementById('menu-status');
 const retryButton = document.getElementById('retry-button');
 const citySelect = document.getElementById('city-filter');
 const companySelect = document.getElementById('company-filter');
+const sortSelect = document.getElementById('sort-select');
+const locationStatus = document.getElementById('location-status');
 
 retryButton.addEventListener('click', retryLoadRestaurants);
 
-citySelect.addEventListener('change', applyCityFilter);
-companySelect.addEventListener('change', applyCityFilter);
+citySelect.addEventListener('change', applyFilters);
+companySelect.addEventListener('change', applyFilters);
 
 document
   .getElementById('menu-type-fieldset')
   .addEventListener('change', loadMenu);
+
+sortSelect.addEventListener('change', async () => {
+  if (sortSelect.value === 'distance' && !state.userPosition) {
+    locationStatus.textContent = 'Getting your location...';
+    try {
+      const currentUserPosition = await getUserPosition();
+      state.userPosition = {
+        latitude: currentUserPosition.coords.latitude,
+        longitude: currentUserPosition.coords.longitude,
+      };
+      addDistanceInfo();
+      locationStatus.textContent = '';
+    } catch (error) {
+      console.error('Error getting user position:', error);
+      locationStatus.textContent = 'Could not get your location.';
+      sortSelect.value = 'name'; // fallback to name sorting
+    }
+  }
+  applyFilters(); // re-apply filters to sort by distance
+});
 
 const state = {
   //state to keep the restaurants once fetched.
   restaurants: [],
   currentID: null,
   lang: 'fi',
+  userPosition: null,
 };
 
 function toggleSettings() {
@@ -49,8 +73,9 @@ function toggleSettings() {
 async function loadRestaurants() {
   try {
     state.restaurants = await fetchRestaurants();
-    renderRestaurantslist(state.restaurants);
-    renderCities(state.restaurants);
+    addDistanceInfo(); // add distance info if user position is available
+    renderCities(state.restaurants); // render cities for filtering
+    applyFilters(); // apply filters to render the restaurant list
     console.log('Fetched restaurants:', state.restaurants); // keep for debugging
   } catch (error) {
     console.error('Error loading restaurants:', error);
@@ -103,7 +128,7 @@ async function retryLoadRestaurants() {
   errorDialog.close();
   await loadRestaurants();
 }
-function applyCityFilter() {
+function applyFilters() {
   const selectedCity = citySelect.value;
   const selectedCompany = companySelect.value;
 
@@ -112,9 +137,26 @@ function applyCityFilter() {
       (selectedCity === '' || r.city === selectedCity) &&
       (selectedCompany === '' || r.company === selectedCompany)
   );
-  visibleRestaurants.sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  if (sortSelect.value === 'distance' && state.userPosition) {
+    visibleRestaurants.sort((a, b) => a.distance - b.distance);
+  } else {
+    visibleRestaurants.sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  }
   renderRestaurantslist(visibleRestaurants);
 }
 
+function addDistanceInfo() {
+  if (!state.userPosition) return; // user position not available
+  for (const restaurant of state.restaurants) {
+    const [lng, lat] = restaurant.location.coordinates;
+    restaurant.distance = distanceInKm(
+      state.userPosition.latitude,
+      state.userPosition.longitude,
+      lat,
+      lng
+    );
+  }
+}
 // top level await works because main.js is loaded as a module
+
 await loadRestaurants();

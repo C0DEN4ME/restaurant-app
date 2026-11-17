@@ -18,6 +18,12 @@ export function renderRestaurantslist(restaurants) {
     btn.type = 'button';
     btn.dataset.id = restaurant._id;
     btn.textContent = restaurant.name;
+
+    if (restaurant.distance !== undefined) {
+      const distanceInfo = document.createElement('span');
+      distanceInfo.textContent = `(${restaurant.distance.toFixed(1)} km)`;
+      btn.appendChild(distanceInfo);
+    }
     li.appendChild(btn);
     list.appendChild(li);
   }
@@ -111,4 +117,5 @@ export function renderCities(restaurants) {
     option.value = city;
     option.textContent = city;
     cityfilter.appendChild(option);
-  }}
+  }
+}
