@@ -307,3 +307,36 @@ input:checked + .mode-switch::before {
   font-size: 1rem;
   font-style: italic;
 }
+
+summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.5rem 0;
+}
+
+summary:hover {
+  background-color: var(--color-accent);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+summary h3 {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+details[open] .course {
+  animation: day-open 0.5s ease-out;
+}
+
+@keyframes day-open {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

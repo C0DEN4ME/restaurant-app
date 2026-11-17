@@ -1,6 +1,10 @@
 import {initTheme} from './theme.js';
 import {fetchRestaurants, fetchRestaurantMenu} from './api.js';
-import {renderRestaurantslist, renderDailyMenu, renderWeeklyMenu} from './render.js';
+import {
+  renderRestaurantslist,
+  renderDailyMenu,
+  renderWeeklyMenu,
+} from './render.js';
 
 initTheme();
 toggleSettings();
@@ -12,6 +16,13 @@ const restaurantCompany = document.getElementById('restaurant-company');
 const errorDialog = document.getElementById('error-dialog');
 const restaurantAddress = document.getElementById('restaurant-address');
 const menuStatus = document.getElementById('menu-status');
+const retryButton = document.getElementById('retry-button');
+
+retryButton.addEventListener('click', retryLoadRestaurants);
+
+document
+  .getElementById('menu-type-fieldset')
+  .addEventListener('change', loadMenu);
 
 const state = {
   //state to keep the restaurants once fetched.
@@ -61,8 +72,8 @@ async function loadMenu() {
   const type = document.querySelector('input[name="menu-type"]:checked').value;
   menuStatus.textContent = 'Loading menu...';
   restaurantMenu.replaceChildren(); // clear possible previous menu
+  const requestedId = state.currentID;
   try {
-    const requestedId = state.currentID;
     const menu = await fetchRestaurantMenu(requestedId, type, state.lang);
     if (requestedId !== state.currentID) {
       // user has selected another restaurant while we were fetching the menu
@@ -79,6 +90,11 @@ async function loadMenu() {
     console.error('Error fetching menu:', error);
     menuStatus.textContent = 'Error loading menu.';
   }
+}
+
+async function retryLoadRestaurants() {
+  errorDialog.close();
+  await loadRestaurants();
 }
 
 // top level await works because main.js is loaded as a module
