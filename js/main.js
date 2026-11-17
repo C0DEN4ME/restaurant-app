@@ -1,6 +1,6 @@
 import {initTheme} from './theme.js';
 import {fetchRestaurants, fetchRestaurantMenu} from './api.js';
-import {renderRestaurantslist, renderDailyMenu} from './render.js';
+import {renderRestaurantslist, renderDailyMenu, renderWeeklyMenu} from './render.js';
 
 initTheme();
 toggleSettings();
@@ -14,7 +14,7 @@ const restaurantAddress = document.getElementById('restaurant-address');
 const menuStatus = document.getElementById('menu-status');
 
 const state = {
-  // global state to keep the restaurants once fetched.
+  //state to keep the restaurants once fetched.
   restaurants: [],
   currentID: null,
   lang: 'fi',
@@ -62,16 +62,20 @@ async function loadMenu() {
   menuStatus.textContent = 'Loading menu...';
   restaurantMenu.replaceChildren(); // clear possible previous menu
   try {
-    const id = state.currentID;
-    const menu = await fetchRestaurantMenu(state.currentID, type, state.lang);
-    if (id !== state.currentID) {
+    const requestedId = state.currentID;
+    const menu = await fetchRestaurantMenu(requestedId, type, state.lang);
+    if (requestedId !== state.currentID) {
       // user has selected another restaurant while we were fetching the menu
       console.warn('Menu fetched for a different restaurant, ignoring.');
       return;
     }
     menuStatus.textContent = '';
-    renderDailyMenu(menu.courses, restaurantMenu);
+    if (type === 'daily') renderDailyMenu(menu.courses, restaurantMenu);
+    else renderWeeklyMenu(menu.days, restaurantMenu);
   } catch (error) {
+    if (requestedId !== state.currentID) {
+      return; // user has selected another restaurant while we were fetching the menu
+    }
     console.error('Error fetching menu:', error);
     menuStatus.textContent = 'Error loading menu.';
   }
