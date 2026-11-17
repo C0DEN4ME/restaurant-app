@@ -4,6 +4,7 @@ import {
   renderRestaurantslist,
   renderDailyMenu,
   renderWeeklyMenu,
+  renderCities,
 } from './render.js';
 
 initTheme();
@@ -44,6 +45,7 @@ async function loadRestaurants() {
   try {
     state.restaurants = await fetchRestaurants();
     renderRestaurantslist(state.restaurants);
+    renderCities(state.restaurants);
     console.log('Fetched restaurants:', state.restaurants); // keep for debugging
   } catch (error) {
     console.error('Error loading restaurants:', error);

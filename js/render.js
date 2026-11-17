@@ -102,3 +102,13 @@ function renderCourses(courses, container) {
     container.appendChild(courseDiv);
   }
 }
+
+export function renderCities(restaurants) {
+  const cityfilter = document.getElementById('city-filter');
+  const cities = [...new Set(restaurants.map((r) => r.city))].sort();
+  for (const city of cities) {
+    const option = document.createElement('option');
+    option.value = city;
+    option.textContent = city;
+    cityfilter.appendChild(option);
+  }}
