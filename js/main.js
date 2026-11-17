@@ -18,8 +18,13 @@ const errorDialog = document.getElementById('error-dialog');
 const restaurantAddress = document.getElementById('restaurant-address');
 const menuStatus = document.getElementById('menu-status');
 const retryButton = document.getElementById('retry-button');
+const citySelect = document.getElementById('city-filter');
+const companySelect = document.getElementById('company-filter');
 
 retryButton.addEventListener('click', retryLoadRestaurants);
+
+citySelect.addEventListener('change', applyCityFilter);
+companySelect.addEventListener('change', applyCityFilter);
 
 document
   .getElementById('menu-type-fieldset')
@@ -97,6 +102,18 @@ async function loadMenu() {
 async function retryLoadRestaurants() {
   errorDialog.close();
   await loadRestaurants();
+}
+function applyCityFilter() {
+  const selectedCity = citySelect.value;
+  const selectedCompany = companySelect.value;
+
+  const visibleRestaurants = state.restaurants.filter(
+    (r) =>
+      (selectedCity === '' || r.city === selectedCity) &&
+      (selectedCompany === '' || r.company === selectedCompany)
+  );
+  visibleRestaurants.sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  renderRestaurantslist(visibleRestaurants);
 }
 
 // top level await works because main.js is loaded as a module
