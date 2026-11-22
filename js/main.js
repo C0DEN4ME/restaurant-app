@@ -39,6 +39,7 @@ const showRegisterButton = document.getElementById('show-register-button');
 const registerUsername = document.getElementById('register-username');
 const usernameStatus = document.getElementById('username-status');
 const registerPrompt = document.getElementById('register-prompt');
+const registerError = document.getElementById('register-error');
 
 retryButton.addEventListener('click', retryLoadRestaurants);
 
@@ -179,10 +180,13 @@ function updateLoginStatus() {
   loginButton.textContent = state.user ? state.user.username : 'Login';
 }
 loginButton.addEventListener('click', () => {
-  if (state.user) profileDialog.showModal();
-  else loginForm.hidden = false; // show login form
-  registerForm.hidden = true; // hide register form
-  loginDialog.showModal();
+  if (state.user) {
+    profileDialog.showModal();
+  } else {
+    loginForm.hidden = false; // show login form
+    registerForm.hidden = true; // hide register form
+    loginDialog.showModal();
+  }
 });
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault(); // prevent form from submitting by default
@@ -211,10 +215,52 @@ registerUsername.addEventListener('blur', async () => {
   if (!username) return;
   try {
     const available = await checkUserNameAvailability(username);
-    usernameStatus.textContent = available ? true : false;
+    usernameStatus.textContent = available
+      ? 'Username is available'
+      : 'Username is taken';
   } catch (error) {
-    usernameStatus.textContent = ''; // the check is a nice-to-have; the server still checks on submit
+    usernameStatus.textContent = '';
+  }
+});
+registerForm.addEventListener('submit', async (event) => {
+  registerError.hidden = true; // hide previous error message
+  event.preventDefault();
+  const user = Object.fromEntries(new FormData(registerForm));
+  try {
+    const result = await registerUser(user);
+    const loginResult = await loginUser({
+      username: user.username,
+      password: user.password,
+    }); // log in the user after successful registration
+    localStorage.setItem('token', loginResult.token); // store the token in localStorage
+    state.user = loginResult.data; // store the logged-in user info in state
+    updateLoginStatus();
+    loginDialog.close();
+    registerForm.reset();
+    registerForm.hidden = true;
+    loginForm.hidden = false;
+    registerPrompt.hidden = false;
+  } catch (error) {
+    console.error('Registration failed:', error);
+    if (error.status >= 500) {
+      loginError.textContent = 'Server error. Please try again later.';
+    } else {
+      loginError.textContent = 'Registration failed. Please try again.';
+    }
+    registerError.hidden = false;
   }
 });
 
+async function restoreLogin() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  try {
+    state.user = await fetchUserProfile(token);
+    updateLoginStatus();
+  } catch (error) {
+    console.error('Failed to restore login:', error);
+    localStorage.removeItem('token'); // remove invalid token
+  }
+}
+await restoreLogin();
 await loadRestaurants();

@@ -40,8 +40,11 @@ export async function loginUser(credentials) {
   });
   const result = await response.json();
   if (!response.ok || !result.token) {
-    //failed login can be due to wrong credentials or server error. We throw an error with the message from the server if available.
-    throw new Error(`Login failed: ${result.message || 'Unknown error'}`);
+    const error = new Error(
+      `Login failed: ${result.message || 'Unknown error'}`
+    );
+    error.status = response.status;
+    throw error;
   }
   return result;
 }
@@ -56,9 +59,11 @@ export async function registerUser(userData) {
   });
   const result = await response.json();
   if (!response.ok) {
-    throw new Error(
-      `Registration failed: ${result.message || 'Unknown error'}`
+    const error = new Error(
+      `Login failed: ${result.message || 'Unknown error'}`
     );
+    error.status = response.status;
+    throw error;
   }
   return result;
 }
@@ -76,13 +81,16 @@ export async function fetchUserProfile(token) {
       `Fetching user profile failed: ${result.message || 'Unknown error'}`
     );
   }
-  return result.user;
+  return result
 }
 
 export async function checkUserNameAvailability(username) {
-  const response = await fetch(`${API_URL}/users/available/${encodeURIComponent(username)}`, {
-    method: 'GET',
-    });
+  const response = await fetch(
+    `${API_URL}/users/available/${encodeURIComponent(username)}`,
+    {
+      method: 'GET',
+    }
+  );
   const result = await response.json();
   if (!response.ok)
     throw new Error(
