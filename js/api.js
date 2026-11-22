@@ -81,7 +81,7 @@ export async function fetchUserProfile(token) {
       `Fetching user profile failed: ${result.message || 'Unknown error'}`
     );
   }
-  return result
+  return result;
 }
 
 export async function checkUserNameAvailability(username) {
@@ -97,4 +97,24 @@ export async function checkUserNameAvailability(username) {
       `Username availability check failed: ${result.message || 'Unknown error'}`
     );
   return result.available;
+}
+
+export async function updateUserProfile(token, userData) {
+  const response = await fetch(`${API_URL}/users`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(userData),
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    const error = new Error(
+      `Login failed: ${result.message || 'Unknown error'}`
+    );
+    error.status = response.status;
+    throw error;
+  }
+  return result;
 }

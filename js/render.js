@@ -1,3 +1,5 @@
+import {t} from './lang.js';
+
 function normalizeDietaryInfo(dietaryInfo) {
   if (!dietaryInfo) return [];
   if (Array.isArray(dietaryInfo)) return dietaryInfo;
@@ -33,41 +35,19 @@ export function renderDailyMenu(courses, container) {
   container.replaceChildren();
   if (!courses || courses.length === 0) {
     const noMenuMessage = document.createElement('p');
-    noMenuMessage.textContent = 'No menu available for today.';
+    noMenuMessage.textContent = t('noMenuToday');
     container.appendChild(noMenuMessage);
     return;
-  } else {
-    for (const course of courses) {
-      const courseDiv = document.createElement('div');
-      courseDiv.classList.add('course');
-      const name = document.createElement('h4');
-      name.textContent = course.name;
-      const price = document.createElement('p');
-      if (course.price === undefined || course.price === null) {
-        price.textContent = 'Price: Not available';
-      } else {
-        price.textContent = `Price: ${course.price}`;
-      }
-      const dietaryInfo = document.createElement('p');
-      const dietaryArray = normalizeDietaryInfo(course.diets);
-      if (dietaryArray.length > 0) {
-        dietaryInfo.textContent = `Dietary Info: ${dietaryArray.join(', ')}`;
-      } else {
-        dietaryInfo.textContent = 'Dietary Info: None';
-      }
-      courseDiv.appendChild(name);
-      courseDiv.appendChild(price);
-      courseDiv.appendChild(dietaryInfo);
-      container.appendChild(courseDiv);
-    }
   }
+  // same as weekly, renderCourses does the courses
+  renderCourses(courses, container);
 }
 
 export function renderWeeklyMenu(days, container) {
   container.replaceChildren();
   if (!days || days.length === 0) {
     const noMenuMessage = document.createElement('p');
-    noMenuMessage.textContent = 'No menu available.';
+    noMenuMessage.textContent = t('noMenuWeek');
     container.appendChild(noMenuMessage);
     return;
   }
@@ -90,17 +70,18 @@ function renderCourses(courses, container) {
     const name = document.createElement('h4');
     name.textContent = course.name;
     const price = document.createElement('p');
+    // colon outside the key
     if (course.price === undefined || course.price === null) {
-      price.textContent = 'Price: Not available';
+      price.textContent = `${t('price')}: ${t('notAvailable')}`;
     } else {
-      price.textContent = `Price: ${course.price}`;
+      price.textContent = `${t('price')}: ${course.price}`;
     }
     const dietaryInfo = document.createElement('p');
     const dietaryArray = normalizeDietaryInfo(course.diets);
     if (dietaryArray.length > 0) {
-      dietaryInfo.textContent = `Dietary Info: ${dietaryArray.join(', ')}`;
+      dietaryInfo.textContent = `${t('diets')}: ${dietaryArray.join(', ')}`;
     } else {
-      dietaryInfo.textContent = 'Dietary Info: None';
+      dietaryInfo.textContent = `${t('diets')}: ${t('dietsNone')}`;
     }
     courseDiv.appendChild(name);
     courseDiv.appendChild(price);

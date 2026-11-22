@@ -3,14 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <link rel="stylesheet" href="css/style.css" />
     <title>Student Restaurant App</title>
+  
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+      defer
+    ></script>
     <script type="module" src="js/main.js"></script>
   </head>
   <body>
     <header>
-      <h1>Student restaurant app</h1>
-      <button type="button" id="settings-button">Settings</button>
+      <h1 data-lang="appTitle">Student restaurant app</h1>
+      <button type="button" id="settings-button" data-lang="settings">Settings</button>
       <button type="button" id="login-button">Login</button>
       <label for="theme-toggle">
         <input
@@ -20,29 +34,29 @@
           class="visually-hidden"
         />
         <span class="mode-switch"></span>
-        <span class="visually-hidden">Lightmode</span>
+        <span class="visually-hidden" data-lang="lightMode">Lightmode</span>
       </label>
     </header>
     <main>
-      <h2 id="filter-header">Filters</h2>
+      <h2 id="filter-header" data-lang="filters">Filters</h2>
       <div class="filters">
         <div class="filter-group">
-          <label for="sort-select">Sort:</label>
+          <label for="sort-select" data-lang="sortLabel">Sort:</label>
           <select id="sort-select">
-            <option value="name-asc">Name (A-Z)</option>
-            <option value="distance">Nearest</option>
+            <option value="name-asc" data-lang="sortName">Name (A-Z)</option>
+            <option value="distance" data-lang="sortNearest">Nearest</option>
           </select>
         </div>
         <form id="city-form" class="filter-group">
-          <label for="city-filter" id="city-label">City: </label>
+          <label for="city-filter" id="city-label" data-lang="cityLabel">City: </label>
           <select id="city-filter" name="city">
-            <option value="">All Cities</option>
+            <option value="" data-lang="allCities">All Cities</option>
           </select>
         </form>
         <form id="company-form">
-          <label for="company-filter" id="company-label">Company: </label>
+          <label for="company-filter" id="company-label" data-lang="companyLabel">Company: </label>
           <select id="company-filter" name="company" autocomplete="off">
-            <option value="">All Companies</option>
+            <option value="" data-lang="allCompanies">All Companies</option>
             <option value="Sodexo">Sodexo</option>
             <option value="Compass Group">Compass Group</option>
           </select>
@@ -50,19 +64,19 @@
       </div>
       <p id="location-status" role="status"></p>
       <section id="restaurants">
-        <h2 id="main-h2">Restaurants</h2>
+        <h2 id="main-h2" data-lang="restaurants">Restaurants</h2>
         <ul id="restaurant-list"></ul>
       </section>
     </main>
     <footer id="footer">
-      <p>Restaurant data: Metropolia Student Restaurants API</p>
+      <p data-lang="dataCredit">Restaurant data: Metropolia Student Restaurants API</p>
       <p>Jonatan Åberg, 10/2026</p>
     </footer>
     <dialog id="settings-dialog" class="dialog">
-      <h2>Settings</h2>
+      <h2 data-lang="settings">Settings</h2>
       <form method="dialog">
         <fieldset id="language-fieldset">
-          <legend>Language</legend>
+          <legend data-lang="language">Language</legend>
           <label>
             <input
               type="radio"
@@ -89,13 +103,13 @@
             </span>
           </label>
         </fieldset>
-        <button id="settings-close-btn" type="submit">Close</button>
+        <button id="settings-close-btn" type="submit" data-lang="close">Close</button>
       </form>
     </dialog>
     <dialog id="login-dialog" class="dialog">
-      <h2>Login</h2>
+      <h2 id="login-title" data-lang="login">Login</h2>
       <form id="login-form">
-        <label for="login-username">Username</label>
+        <label for="login-username" data-lang="username">Username</label>
         <input
           type="text"
           id="login-username"
@@ -103,7 +117,7 @@
           autocomplete="username"
           required
         />
-        <label for="login-password">Password</label>
+        <label for="login-password" data-lang="password">Password</label>
         <input
           type="password"
           id="login-password"
@@ -111,15 +125,15 @@
           autocomplete="current-password"
           required
         />
-        <button type="submit">Log In</button>
+        <button type="submit" data-lang="logIn">Log In</button>
       </form>
       <p id="login-error" role="alert" hidden></p>
-      <p id ="register-prompt"> 
-        No account?
-        <button type="button" id="show-register-button">Register</button>
+      <p id="register-prompt">
+        <span data-lang="noAccount">No account?</span>
+        <button type="button" id="show-register-button" data-lang="register">Register</button>
       </p>
       <form id="register-form" hidden>
-        <label for="register-username">Username</label>
+        <label for="register-username" data-lang="username">Username</label>
         <input
           type="text"
           id="register-username"
@@ -129,7 +143,7 @@
         />
         <p id="username-status" aria-live="polite"></p>
 
-        <label for="register-email">Email</label>
+        <label for="register-email" data-lang="email">Email</label>
         <input
           type="email"
           id="register-email"
@@ -138,7 +152,7 @@
           required
         />
 
-        <label for="register-password">Password</label>
+        <label for="register-password" data-lang="password">Password</label>
         <input
           type="password"
           id="register-password"
@@ -150,32 +164,32 @@
 
         <p id="register-error" role="alert" hidden></p>
 
-        <button type="submit">Create account</button>
+        <button type="submit" data-lang="createAccount">Create account</button>
       </form>
 
       <form method="dialog">
-        <button type="submit">Close</button>
+        <button type="submit" data-lang="close">Close</button>
       </form>
     </dialog>
     <dialog id="profile-dialog" class="dialog">
-      <h2>Profile</h2>
+      <h2 data-lang="profile">Profile</h2>
       <img
         id="profile-avatar"
         src="img/default-profile-icon.jpg"
         alt="Profile avatar"
       />
       <form id="profile-avatar-form">
-        <label for="profile-avatar-input">Change avatar:</label>
+        <label for="profile-avatar-input" data-lang="changeAvatar">Change avatar:</label>
         <input
           type="file"
           id="profile-avatar-input"
           name="avatar"
           accept="image/*"
         />
-        <button type="submit">Upload</button>
+        <button type="submit" data-lang="upload">Upload</button>
       </form>
       <form id="profile-form">
-        <label for="profile-username-input">Change username</label>
+        <label for="profile-username-input" data-lang="changeUsername">Change username</label>
         <input
           type="text"
           id="profile-username-input"
@@ -183,7 +197,7 @@
           autocomplete="username"
           required
         />
-        <label for="profile-email-input">Change email</label>
+        <label for="profile-email-input" data-lang="changeEmail">Change email</label>
         <input
           type="email"
           id="profile-email-input"
@@ -191,40 +205,39 @@
           autocomplete="email"
           required
         />
-        <label for="profile-password-input">New password</label>
+        <label for="profile-password-input" data-lang="newPassword">New password</label>
         <input
           type="password"
           id="profile-password-input"
           name="password"
           autocomplete="new-password"
         />
-        <button type="submit">Update profile</button>
+        <button type="submit" data-lang="updateProfile">Update profile</button>
       </form>
-      <button type="button" id="logout-button">Logout</button>
+      <button type="button" id="logout-button" data-lang="logout">Logout</button>
       <form method="dialog">
-        <button type="submit">Close</button>
+        <button type="submit" data-lang="close">Close</button>
       </form>
     </dialog>
     <dialog id="restaurant-details" class="dialog restaurant-dialog">
       <header>
-        <button type="button" id="favorite-button">Add to favorites</button>
+        <button type="button" id="favourite-button">Add to favorites</button>
         <h2 id="restaurant-name"></h2>
         <p id="restaurant-company"></p>
         <form method="dialog">
-          <button type="submit" id="close-details-button">Close</button>
+          <button type="submit" id="close-details-button" data-lang="close">Close</button>
         </form>
       </header>
       <p id="restaurant-address"></p>
-      <p id="restaurant-city"></p>
       <div id="restaurant-map"></div>
       <fieldset id="menu-type-fieldset">
-        <legend>Menu</legend>
+        <legend data-lang="menu">Menu</legend>
         <label>
           <input type="radio" name="menu-type" value="daily" checked />
-          Today
+          <span data-lang="today">Today</span>
         </label>
         <label>
-          <input type="radio" name="menu-type" value="weekly" /> Weekly
+          <input type="radio" name="menu-type" value="weekly" /> <span data-lang="weekly">Weekly</span>
         </label>
       </fieldset>
       <p id="menu-status" role="status"></p>
@@ -236,11 +249,11 @@
       role="alertdialog"
       aria-labelledby="error-title"
     >
-      <h2 id="error-title">API Connection problem</h2>
-      <p id="error-message" role="alert">Restaurants could not be loaded.</p>
-      <button type="button" id="retry-button">Try again</button>
+      <h2 id="error-title" data-lang="errorTitle">API Connection problem</h2>
+      <p id="error-message" role="alert" data-lang="errorMessage">Restaurants could not be loaded.</p>
+      <button type="button" id="retry-button" data-lang="tryAgain">Try again</button>
       <form method="dialog">
-        <button type="submit">Close</button>
+        <button type="submit" data-lang="close">Close</button>
       </form>
     </dialog>
   </body>

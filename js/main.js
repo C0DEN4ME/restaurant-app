@@ -1,5 +1,13 @@
 import {initTheme} from './theme.js';
-import {fetchRestaurants, fetchRestaurantMenu} from './api.js';
+import {
+  fetchRestaurants,
+  fetchRestaurantMenu,
+  loginUser,
+  registerUser,
+  fetchUserProfile,
+  checkUserNameAvailability,
+  updateUserProfile,
+} from './api.js';
 import {
   renderRestaurantslist,
   renderDailyMenu,
@@ -7,12 +15,8 @@ import {
   renderCities,
 } from './render.js';
 import {distanceInKm, getUserPosition} from './utils.js';
-import {
-  loginUser,
-  registerUser,
-  fetchUserProfile,
-  checkUserNameAvailability,
-} from './api.js';
+import {t, setLanguage, applyLanguage} from './lang.js';
+import {showRestaurantMap} from './map.js';
 
 initTheme();
 toggleSettings();
@@ -41,6 +45,8 @@ const usernameStatus = document.getElementById('username-status');
 const registerPrompt = document.getElementById('register-prompt');
 const registerError = document.getElementById('register-error');
 const logoutButton = document.getElementById('logout-button');
+const favouriteButton = document.getElementById('favourite-button');
+const loginTitle = document.getElementById('login-title');
 
 retryButton.addEventListener('click', retryLoadRestaurants);
 
@@ -53,7 +59,7 @@ document
 
 sortSelect.addEventListener('change', async () => {
   if (sortSelect.value === 'distance' && !state.userPosition) {
-    locationStatus.textContent = 'Getting your location...';
+    locationStatus.textContent = t('gettingLocation');
     try {
       const currentUserPosition = await getUserPosition();
       state.userPosition = {
@@ -64,7 +70,7 @@ sortSelect.addEventListener('change', async () => {
       locationStatus.textContent = '';
     } catch (error) {
       console.error('Error getting user position:', error);
-      locationStatus.textContent = 'Could not get your location.';
+      locationStatus.textContent = t('locationError');
       sortSelect.value = 'name'; // fallback to name sorting
     }
   }
@@ -77,7 +83,7 @@ const state = {
   currentID: null,
   lang: 'fi',
   userPosition: null,
-  user: null, // to store the logged-in user infol
+  user: null, // logged in user, null when logged out
 };
 
 function toggleSettings() {
@@ -112,22 +118,24 @@ document
     const restaurant = state.restaurants.find((r) => r._id === state.currentID); // find the restaurant object from the state
     if (restaurant) {
       restaurantName.textContent = restaurant.name;
-      restaurantCompany.textContent = restaurant.company; // set the company name
+      restaurantCompany.textContent = restaurant.company;
       restaurantAddress.textContent = `${restaurant.address}, ${restaurant.postalCode} ${restaurant.city}`;
+      updateFavouriteButton();
       restaurantDetails.showModal();
+      showRestaurantMap(restaurant); // after showModal or the map gets 0 size
       await loadMenu();
     }
   });
 
 async function loadMenu() {
   const type = document.querySelector('input[name="menu-type"]:checked').value;
-  menuStatus.textContent = 'Loading menu...';
+  menuStatus.textContent = t('loadingMenu');
   restaurantMenu.replaceChildren(); // clear possible previous menu
   const requestedId = state.currentID;
   try {
     const menu = await fetchRestaurantMenu(requestedId, type, state.lang);
     if (requestedId !== state.currentID) {
-      // user has selected another restaurant while we were fetching the menu
+      // another restaurant was clicked while loading, ignore this one
       console.warn('Menu fetched for a different restaurant, ignoring.');
       return;
     }
@@ -136,10 +144,10 @@ async function loadMenu() {
     else renderWeeklyMenu(menu.days, restaurantMenu);
   } catch (error) {
     if (requestedId !== state.currentID) {
-      return; // user has selected another restaurant while we were fetching the menu
+      return; // another restaurant was clicked while loading, ignore this one
     }
     console.error('Error fetching menu:', error);
-    menuStatus.textContent = 'Error loading menu.';
+    menuStatus.textContent = t('menuError');
   }
 }
 
@@ -161,6 +169,14 @@ function applyFilters() {
   } else {
     visibleRestaurants.sort((a, b) => a.name.localeCompare(b.name, 'fi'));
   }
+  const favouriteID = state.user?.favouriteRestaurant;
+  const favouriteIndex = visibleRestaurants.findIndex(
+    (r) => r._id === favouriteID
+  );
+  if (favouriteIndex > 0) {
+    const [favourite] = visibleRestaurants.splice(favouriteIndex, 1);
+    visibleRestaurants.unshift(favourite); // favourite first, only if its in the filtered list
+  }
   renderRestaurantslist(visibleRestaurants);
 }
 
@@ -178,38 +194,42 @@ function addDistanceInfo() {
 }
 
 function updateLoginStatus() {
-  loginButton.textContent = state.user ? state.user.username : 'Login';
+  loginError.hidden = true;
+  registerError.hidden = true;
+  registerPrompt.hidden = false;
+  loginButton.textContent = state.user ? state.user.username : t('login');
 }
 loginButton.addEventListener('click', () => {
   if (state.user) {
     profileDialog.showModal();
   } else {
-    loginForm.hidden = false; // show login form
-    registerForm.hidden = true; // hide register form
+    loginForm.hidden = false;
+    registerForm.hidden = true;
     loginDialog.showModal();
   }
 });
 loginForm.addEventListener('submit', async (event) => {
-  event.preventDefault(); // prevent form from submitting by default
-  loginError.hidden = true; // hide previous error message
-  const credentials = Object.fromEntries(new FormData(loginForm)); // get form data as an object
+  event.preventDefault(); // no page reload
+  loginError.hidden = true; // hide old error
+  const credentials = Object.fromEntries(new FormData(loginForm)); // uses the input names as keys
   try {
     const result = await loginUser(credentials);
-    localStorage.setItem('token', result.token); // store the token in localStorage
-    state.user = result.data; // store the logged-in user info in state
+    localStorage.setItem('token', result.token);
+    state.user = result.data; // user is in data, not user
     updateLoginStatus();
-    loginForm.reset(); // reset the form fields
+    loginForm.reset();
     loginDialog.close();
   } catch (error) {
     console.error('Login failed:', error);
-    loginError.textContent = 'Wrong username or password.'; // show a generic error message
-    loginError.hidden = false; // show the error message
+    loginError.textContent = t('wrongCredentials'); // dont tell which one was wrong
+    loginError.hidden = false;
   }
 });
 showRegisterButton.addEventListener('click', () => {
   loginForm.hidden = true;
   registerForm.hidden = false;
-  registerPrompt.hidden = true; // show the register prompt
+  registerPrompt.hidden = true;
+  loginTitle.textContent = t('register'); // change the title to register
 });
 registerUsername.addEventListener('blur', async () => {
   const username = registerUsername.value.trim();
@@ -217,14 +237,14 @@ registerUsername.addEventListener('blur', async () => {
   try {
     const available = await checkUserNameAvailability(username);
     usernameStatus.textContent = available
-      ? 'Username is available'
-      : 'Username is taken';
+      ? t('usernameAvailable')
+      : t('usernameTaken');
   } catch (error) {
     usernameStatus.textContent = '';
   }
 });
 registerForm.addEventListener('submit', async (event) => {
-  registerError.hidden = true; // hide previous error message
+  registerError.hidden = true; // hide old error
   event.preventDefault();
   const user = Object.fromEntries(new FormData(registerForm));
   try {
@@ -232,9 +252,9 @@ registerForm.addEventListener('submit', async (event) => {
     const loginResult = await loginUser({
       username: user.username,
       password: user.password,
-    }); // log in the user after successful registration
-    localStorage.setItem('token', loginResult.token); // store the token in localStorage
-    state.user = loginResult.data; // store the logged-in user info in state
+    }); // log in straight away, no need to type it again
+    localStorage.setItem('token', loginResult.token);
+    state.user = loginResult.data; // user is in data, not user
     updateLoginStatus();
     loginDialog.close();
     registerForm.reset();
@@ -243,22 +263,25 @@ registerForm.addEventListener('submit', async (event) => {
     registerPrompt.hidden = false;
   } catch (error) {
     console.error('Registration failed:', error);
-    if (error.status >= 500) {
-      loginError.textContent = 'Server error. Please try again later.';
+    if (error.message.includes('535')) {
+      // 535 = server email fails but the user IS created
+      registerError.textContent = t('registrationEmailError');
+    } else if (error.status >= 500) {
+      registerError.textContent = t('serverError');
     } else {
-      loginError.textContent = 'Registration failed. Please try again.';
+      registerError.textContent = t('registrationFailed');
     }
     registerError.hidden = false;
   }
 });
 
 function logoutUser() {
-  localStorage.removeItem('token'); // remove the token from localStorage
-  state.user = null; // clear the user info from state
+  localStorage.removeItem('token');
+  state.user = null;
   updateLoginStatus();
   profileDialog.close();
 }
-logoutButton.addEventListener('click', logoutUser); // add event listener for logout button
+logoutButton.addEventListener('click', logoutUser);
 
 async function restoreLogin() {
   const token = localStorage.getItem('token');
@@ -268,8 +291,71 @@ async function restoreLogin() {
     updateLoginStatus();
   } catch (error) {
     console.error('Failed to restore login:', error);
-    localStorage.removeItem('token'); // remove invalid token
+    localStorage.removeItem('token'); // expired or broken token
   }
 }
+
+function updateFavouriteButton() {
+  favouriteButton.hidden = !state.user; // no button when logged out
+  if (!state.user) {
+    favouriteButton.disabled = true;
+    return;
+  }
+  const isFavourite = state.user.favouriteRestaurant === state.currentID;
+  favouriteButton.textContent = isFavourite
+    ? t('favourite')
+    : t('addFavourite');
+  favouriteButton.disabled = isFavourite; // can't remove a favourite, api gives 400 for null
+}
+
+favouriteButton.addEventListener('click', async () => {
+  try {
+    const newFavouriteRestaurant =
+      state.user.favouriteRestaurant === state.currentID
+        ? null
+        : state.currentID;
+    await updateUserProfile(localStorage.getItem('token'), {
+      favouriteRestaurant:
+        state.user.favouriteRestaurant === state.currentID
+          ? null
+          : state.currentID,
+    });
+    state.user.favouriteRestaurant = newFavouriteRestaurant;
+    applyFilters(); // so the favourite moves to the top
+  } catch (error) {
+    console.error('Failed to update favourite restaurant:', error);
+  }
+  updateFavouriteButton();
+});
+
+// Language switch
+// applyLanguage only does the html, texts made in js have to be redrawn here
+function changeLanguage(lang) {
+  state.lang = lang; // for the menu fetch
+  setLanguage(lang); // for t()
+  localStorage.setItem('lang', lang); // same as theme
+  applyLanguage();
+  updateLoginStatus();
+  if (state.currentID) {
+    updateFavouriteButton();
+    loadMenu(); // api gives the menu in the new lang
+  }
+}
+
+// change bubbles up from the radios
+document
+  .getElementById('language-fieldset')
+  .addEventListener('change', (event) => changeLanguage(event.target.value));
+
+// Initial load
+
+// saved -> browser lang -> fi
+const startLang =
+  localStorage.getItem('lang') ||
+  (navigator.language.startsWith('fi') ? 'fi' : 'en');
+document.querySelector(`input[name="language"][value="${startLang}"]`).checked =
+  true;
+changeLanguage(startLang);
+
 await restoreLogin();
 await loadRestaurants();
