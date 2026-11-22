@@ -178,7 +178,8 @@
         src="img/default-profile-icon.jpg"
         alt="Profile avatar"
       />
-      <form id="profile-avatar-form">
+      <!-- hidden until profile editing has js, otherwise submit puts the password in the url -->
+      <form id="profile-avatar-form" hidden>
         <label for="profile-avatar-input" data-lang="changeAvatar">Change avatar:</label>
         <input
           type="file"
@@ -188,7 +189,7 @@
         />
         <button type="submit" data-lang="upload">Upload</button>
       </form>
-      <form id="profile-form">
+      <form id="profile-form" hidden>
         <label for="profile-username-input" data-lang="changeUsername">Change username</label>
         <input
           type="text"

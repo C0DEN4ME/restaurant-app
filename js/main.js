@@ -203,8 +203,11 @@ loginButton.addEventListener('click', () => {
   if (state.user) {
     profileDialog.showModal();
   } else {
+    // always open in login mode, register click changes all of these
     loginForm.hidden = false;
     registerForm.hidden = true;
+    registerPrompt.hidden = false;
+    loginTitle.textContent = t('login');
     loginDialog.showModal();
   }
 });
