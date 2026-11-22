@@ -7,6 +7,12 @@ import {
   renderCities,
 } from './render.js';
 import {distanceInKm, getUserPosition} from './utils.js';
+import {
+  loginUser,
+  registerUser,
+  fetchUserProfile,
+  checkUserNameAvailability,
+} from './api.js';
 
 initTheme();
 toggleSettings();
@@ -23,6 +29,16 @@ const citySelect = document.getElementById('city-filter');
 const companySelect = document.getElementById('company-filter');
 const sortSelect = document.getElementById('sort-select');
 const locationStatus = document.getElementById('location-status');
+const loginButton = document.getElementById('login-button');
+const loginDialog = document.getElementById('login-dialog');
+const profileDialog = document.getElementById('profile-dialog');
+const loginForm = document.getElementById('login-form');
+const loginError = document.getElementById('login-error');
+const registerForm = document.getElementById('register-form');
+const showRegisterButton = document.getElementById('show-register-button');
+const registerUsername = document.getElementById('register-username');
+const usernameStatus = document.getElementById('username-status');
+const registerPrompt = document.getElementById('register-prompt');
 
 retryButton.addEventListener('click', retryLoadRestaurants);
 
@@ -59,6 +75,7 @@ const state = {
   currentID: null,
   lang: 'fi',
   userPosition: null,
+  user: null, // to store the logged-in user infol
 };
 
 function toggleSettings() {
@@ -157,6 +174,47 @@ function addDistanceInfo() {
     );
   }
 }
-// top level await works because main.js is loaded as a module
+
+function updateLoginStatus() {
+  loginButton.textContent = state.user ? state.user.username : 'Login';
+}
+loginButton.addEventListener('click', () => {
+  if (state.user) profileDialog.showModal();
+  else loginForm.hidden = false; // show login form
+  registerForm.hidden = true; // hide register form
+  loginDialog.showModal();
+});
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault(); // prevent form from submitting by default
+  loginError.hidden = true; // hide previous error message
+  const credentials = Object.fromEntries(new FormData(loginForm)); // get form data as an object
+  try {
+    const result = await loginUser(credentials);
+    localStorage.setItem('token', result.token); // store the token in localStorage
+    state.user = result.data; // store the logged-in user info in state
+    updateLoginStatus();
+    loginForm.reset(); // reset the form fields
+    loginDialog.close();
+  } catch (error) {
+    console.error('Login failed:', error);
+    loginError.textContent = 'Wrong username or password.'; // show a generic error message
+    loginError.hidden = false; // show the error message
+  }
+});
+showRegisterButton.addEventListener('click', () => {
+  loginForm.hidden = true;
+  registerForm.hidden = false;
+  registerPrompt.hidden = true; // show the register prompt
+});
+registerUsername.addEventListener('blur', async () => {
+  const username = registerUsername.value.trim();
+  if (!username) return;
+  try {
+    const available = await checkUserNameAvailability(username);
+    usernameStatus.textContent = available ? true : false;
+  } catch (error) {
+    usernameStatus.textContent = ''; // the check is a nice-to-have; the server still checks on submit
+  }
+});
 
 await loadRestaurants();
