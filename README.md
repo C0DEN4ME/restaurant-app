@@ -11,3 +11,4 @@
 - Default profile picture: "Default-Icon.jpg" by TheDohnJoe
   (https://commons.wikimedia.org/wiki/File:Default-Icon.jpg), licensed under CC BY-SA 4.0
   (https://creativecommons.org/licenses/by-sa/4.0/), via Wikimedia Commons.
+- Claude Code was used in assisting of this project. ideas and tips on how to proceed when stuck.
