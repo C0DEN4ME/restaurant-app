@@ -40,6 +40,7 @@ const registerUsername = document.getElementById('register-username');
 const usernameStatus = document.getElementById('username-status');
 const registerPrompt = document.getElementById('register-prompt');
 const registerError = document.getElementById('register-error');
+const logoutButton = document.getElementById('logout-button');
 
 retryButton.addEventListener('click', retryLoadRestaurants);
 
@@ -250,6 +251,14 @@ registerForm.addEventListener('submit', async (event) => {
     registerError.hidden = false;
   }
 });
+
+function logoutUser() {
+  localStorage.removeItem('token'); // remove the token from localStorage
+  state.user = null; // clear the user info from state
+  updateLoginStatus();
+  profileDialog.close();
+}
+logoutButton.addEventListener('click', logoutUser); // add event listener for logout button
 
 async function restoreLogin() {
   const token = localStorage.getItem('token');
